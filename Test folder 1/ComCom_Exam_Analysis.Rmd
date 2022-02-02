@@ -1,0 +1,120 @@
+---
+title: "ComCom_Exam_Analysis"
+author: "Me"
+date: "14/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(tidyverse)
+pacman::p_load(boot)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+# Read all files
+temp = list.files(path = "CogCom_Exam_Project/logfiles_corrected", full.names = T, pattern="*.csv")
+# Load them all in
+data <- map_dfr(temp, read_csv)
+
+data$condition <- as.factor(data$condition)
+data$gender <- as.factor(data$gender)
+
+data1 <-data %>% 
+  filter(...1 == 9 | condition == '3') %>% 
+  group_by(condition)
+
+dataR <- data1 %>% 
+  mutate(
+  response = ifelse(answer == 'seal'|answer == 'sealion'|answer == 'sea lion'|answer == 'dolphin', 0,1)
+)
+
+dataC <- data1 %>% 
+  filter(answer == 'seal'|answer == 'sealion'|answer == 'sea lion'|answer == 'horse'|answer == 'donkey')
+dataC <- dataC %>% 
+  mutate(
+  response = ifelse(answer == 'seal'|answer == 'sealion'|answer == 'sea lion', 0,1)
+)
+  
+dataR$response <- as.factor(dataR$response)
+dataR2 <- filter(dataR, condition != '3')
+
+dataR2_model <- glm(response ~ condition, data = dataR2, family = binomial(link = logit))
+summary(dataR2_model)
+car::vif(dataR2_model)
+
+ggplot(dataR2,aes(x=condition, y=response))+
+  geom_jitter(width = .4, height = .4)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+table(dataR$response,dataR$condition)
+chisq.test(dataR2$response,dataR2$condition, correct=F)
+
+table(dataR$response,dataR$condition)
+chisq.test(dataC$response,dataC$condition, correct=F)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+
+
+
+
+```{r}
+data1 <-data %>% 
+  filter(...1 == 9 | condition == '3') %>% 
+  group_by(condition)
+
+dataR <- data1 %>% 
+  mutate(
+  response = ifelse(answer == 'seal'|answer == 'sealion'|answer == 'sea lion'|answer == 'dolphin', 0,1)
+)
+  
+dataR$response <- as.factor(dataR$response)
+dataR2 <- filter(dataR, condition != '3')
+
+dataR2_model <- glm(response ~ condition, data = dataR2, family = binomial(link = 'logit'))
+summary(dataR2_model)
+```
+```{r}
+pacman::p_load(tidyverse)
+pacman::p_load(boot)
+
+# Read all files
+temp = list.files(path = "CogCom_Exam_Project/logfiles_corrected", full.names = T, pattern="*.csv")
+# Load them all in
+data <- map_dfr(temp, read_csv)
+
+data$condition <- as.factor(data$condition)
+data$gender <- as.factor(data$gender)
+
+data1 <-data %>% 
+  filter(...1 == 9 | condition == '3') %>% 
+  group_by(condition)
+
+dataR <- data1 %>% 
+  mutate(
+  response = ifelse(answer == 'seal'|answer == 'sealion'|answer == 'sea lion'|answer == 'dolphin', 0,1)
+)
+
+dataR$response <- as.factor(dataR$response)
+dataR2 <- filter(dataR, condition != '3')
+
+dataR2_model <- glm(response ~ condition, data = dataR2, family = binomial(link = 'logit'))
+summary(dataR2_model)
+```
+
+
