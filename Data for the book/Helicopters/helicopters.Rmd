@@ -30,7 +30,7 @@ root<-has_file(".ROS-Examples-root")$make_fix_file()
 #### Load data
 
 ```{r }
-helicopters <- read.table(root("Helicopters/data","helicopters.txt"), header=TRUE)
+data <- rnorm(100, mean = 2, sd = )
 ```
 
 #### Display the example data
